@@ -1,4 +1,6 @@
 #lang racket
+; http://www.chegg.com/homework-help/questions-and-answers/task-implement-simple-chatbot-racket--s-sample-chat-program-carry-chat-name-hi-name-talk-a-q20637753
+
 
 ; Use the random function implemented in Racket
 ; (random k) returns a random integer in the range 0 to k-1
