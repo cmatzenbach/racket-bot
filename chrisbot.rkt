@@ -35,15 +35,15 @@
 
 (define (to-string lst)
   (cond
-    [(empty? lst) ""]
+    [(null? lst) ""]
     [(eq? (length lst) 1) (symbol->string(car lst))]
-    [else (string-append(symbol->string(car lst)))]
+    [else (string-append (symbol->string(car lst)) " " (to-string (cdr lst)))]
     ))
 
 ; Main Function
 ; usage: (chat-with 'your-name)
 (define (chat-with name)
-  (output (list 'hi name))
+  (output (list 'Hi name))
   (chat-loop name))
 
 ; chat loop
@@ -51,13 +51,22 @@
   (let ((input(prompt)))   ; get user input
     (if (eqv? (car input) 'bye)
         (begin
-          (output (list 'bye name))
+          (output(list 'bye name))
           (output(list 'have 'a 'great 'day!)))
         (begin
           (reply input name)
           (chat-loop name)))))
 
 (define (reply input name)
-  (output 'Hello 'there))
+  (cond
+    [(output (pick-random generic-response))]
+    []))
+
+(define (pick-random choices)
+  (list-ref choices(random(length choices))))
+
+(define generic-response '((that\'s nice)
+                           (good to know)
+                           (can you elaborate on that?)))
 
 (chat-with 'Chris)
