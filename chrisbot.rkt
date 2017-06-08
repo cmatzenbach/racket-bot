@@ -63,7 +63,7 @@
 
 (define (reply input name)
   (cond
-    [(string-contains-mult input '(do can will would)) modal-response]
+    [(not(null? (string-contains-mult (to-string input) '("do" "can" "will" "would")))) (output(modal-response (string-contains-mult (to-string input) '("do" "can" "will" "would")) name))]
     [else (output (pick-random generic-response))]
     ))
 
@@ -73,15 +73,16 @@
 (define generic-response '((that\'s nice)
                            (good to know)
                            (can you elaborate on that?)))
+
 (define (modal-response verb person)
   ;random gen either 1 or 2
+  (define num 1)
   (if (= 1 num)
-      (define resp 'Yes)
-      (define resp 'No))
-  (list resp 'I verb (when (= 2 num) 'not) person))
+      (list 'Yes 'I verb person)
+      (list 'No 'I verb 'not person)))
 
 (define (string-contains-mult str lst)
-  )
+  (filter (lambda (elem) (string-contains str elem)) lst))
 
 
 (chat-with 'Chris)
