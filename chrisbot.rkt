@@ -8,6 +8,8 @@
 ; Use the random function implemented in Racket
 ; (random k) returns a random integer in the range 0 to k-1
 (#%require (only racket/base random))
+; library for string-contains
+(require srfi/13)
 
 ; I/O Helper Functions
 
@@ -33,6 +35,8 @@
   (display (to-string lst))
   (newline))
 
+; List -> String
+; Convert list to printable string
 (define (to-string lst)
   (cond
     [(null? lst) ""]
@@ -59,8 +63,9 @@
 
 (define (reply input name)
   (cond
-    [(output (pick-random generic-response))]
-    []))
+    [(string-contains-mult input '(do can will would)) modal-response]
+    [else (output (pick-random generic-response))]
+    ))
 
 (define (pick-random choices)
   (list-ref choices(random(length choices))))
@@ -68,5 +73,15 @@
 (define generic-response '((that\'s nice)
                            (good to know)
                            (can you elaborate on that?)))
+(define (modal-response verb person)
+  ;random gen either 1 or 2
+  (if (= 1 num)
+      (define resp 'Yes)
+      (define resp 'No))
+  (list resp 'I verb (when (= 2 num) 'not) person))
+
+(define (string-contains-mult str lst)
+  )
+
 
 (chat-with 'Chris)
