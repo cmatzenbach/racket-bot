@@ -78,7 +78,8 @@
   ;random gen either 1 or 2
   (define num 1)
   (if (= 1 num)
-      (list 'Yes 'I verb person)
+      (list 'Yes 'I (map string->symbol verb) person)
+      ;; example: (map string->symbol '("would"))
       (list 'No 'I verb 'not person)))
 
 (define (string-contains-mult str lst)
