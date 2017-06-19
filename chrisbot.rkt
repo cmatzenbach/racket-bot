@@ -64,6 +64,7 @@
 (define (reply input name)
   (cond
     [(not(null? (string-contains-mult (to-string input) '("do" "can" "will" "would")))) (output(modal-response (string-contains-mult (to-string input) '("do" "can" "will" "would")) name))]
+    [(not(null? (string-contains (to-string input) "why"))) (output(list 'Why 'not?))]
     [else (output (pick-random generic-response))]
     ))
 
@@ -83,6 +84,9 @@
       (list 'No 'I (to-string verb) 'not person)))
 
 (define (string-contains-mult str lst)
+  ; lambda is a generic function def, filter applies it to each item in list and
+  ; returns the result of any that are true, then string->symbol to change the ""
+  ; item into a symbol for list concat, need to take car of '("item") to get string
   (string->symbol(car (filter (lambda (elem) (string-contains str elem)) lst))))
 
 
