@@ -78,12 +78,12 @@
   ;random gen either 1 or 2
   (define num 1)
   (if (= 1 num)
-      (list 'Yes 'I (map string->symbol verb) person)
+      (list 'Yes 'I verb person)
       ;; example: (map string->symbol '("would"))
-      (list 'No 'I verb 'not person)))
+      (list 'No 'I (to-string verb) 'not person)))
 
 (define (string-contains-mult str lst)
-  (filter (lambda (elem) (string-contains str elem)) lst))
+  (string->symbol(car (filter (lambda (elem) (string-contains str elem)) lst))))
 
 
 (chat-with 'Chris)
