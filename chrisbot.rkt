@@ -3,8 +3,6 @@
 ; CHRIS-BOT
 #lang racket
 
-; module containing to-string
-;; (require web-server/formlets/input)
 ; Use the random function implemented in Racket
 ; (random k) returns a random integer in the range 0 to k-1
 (#%require (only racket/base random))
@@ -13,14 +11,14 @@
 
 ; I/O Helper Functions
 
-; Nil -> List
+; prompt: nil -> list
 ; Prompt user for input
 (define (prompt)
   (newline)
   (display "talk to me >>>")
   (read-user-line))
 
-; Nil -> List
+; read-user-line: nil -> list
 ; Read user input until end of character
 (define (read-user-line)
   (let ((next(read)))
@@ -28,14 +26,14 @@
         '()
         (cons next (read-user-line)))))
 
-; List -> Nil
+; output: list -> nil
 ; Display output from list of chars
 (define (output lst)
   (newline)
   (display (to-string lst))
   (newline))
 
-; List -> String
+; to-string: list -> string
 ; Convert list to printable string
 (define (to-string lst)
   (cond
@@ -50,7 +48,8 @@
   (output (list 'Hi name))
   (chat-loop name))
 
-; chat loop
+; chat-loop: string -> (func)
+; Main loop control; gets input, make sure it is not exit, then calls response
 (define (chat-loop name)
   (let ((input(prompt)))   ; get user input
     (if (eqv? (car input) 'bye)
@@ -61,13 +60,16 @@
           (reply input name)
           (chat-loop name)))))
 
+; reply: list string -> (func)
 (define (reply input name)
   (cond
-    [(not(null? (string-contains-mult (to-string input) '("do" "can" "will" "would")))) (output(modal-response (string-contains-mult (to-string input) '("do" "can" "will" "would")) name))]
     [(string-contains (to-string input) "why") (output(list 'Why 'not?))]
+    [(not(null? (string-contains-mult (to-string input) '("do" "can" "will" "would")))) (output(modal-response (string-contains-mult (to-string input) '("do" "can" "will" "would")) name))]
     [else (output (pick-random generic-response))]
     ))
 
+; pick-random: int -> int
+; Takes in limit and returns random int within said limit
 (define (pick-random choices)
   (list-ref choices(random(length choices))))
 
@@ -75,6 +77,8 @@
                            (good to know)
                            (can you elaborate on that?)))
 
+; modal-response: list string -> response
+; Gives a yes or no response to any comments using modal verbs
 (define (modal-response verb person)
   ;random gen either 1 or 2
   (define num 1)
@@ -83,6 +87,8 @@
       ;; example: (map string->symbol '("would"))
       (list 'No 'I (to-string verb) 'not person)))
 
+; string-contains-mult: string list -> bool
+; Takes in a list of strings and determines if target appears in list
 (define (string-contains-mult str lst)
   ; lambda is a generic function def, filter applies it to each item in list and
   ; returns the result of any that are true, then string->symbol to change the ""
