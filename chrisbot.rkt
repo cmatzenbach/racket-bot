@@ -63,8 +63,11 @@
 ; reply: list string -> (func)
 (define (reply input name)
   (cond
-    [(string-contains (to-string input) "why") (output(list 'Why 'not?))]
-    [(not(null? (string-contains-mult (to-string input) '("do" "can" "will" "would")))) (output(modal-response (string-contains-mult (to-string input) '("do" "can" "will" "would")) name))]
+    [(string-contains (string-downcase (to-string input)) "why") (output(list 'Why 'not?))]
+    [(string-contains (string-downcase (to-string input)) "how") (output(how-response))]
+    [(string-contains (string-downcase (to-string input)) "what") (output(what-response))]
+    [(string-contains (string-downcase (to-string input)) "because") (output(bc-response))]
+    [(not(null? (string-contains-mult (to-string input) '("do" "can" "could" "must" "should" "will" "would")))) (output(modal-response (string-contains-mult (to-string input) '("do" "can" "could" "must" "should" "will" "would")) name))]
     [else (output (pick-random generic-response))]
     ))
 
@@ -81,11 +84,29 @@
 ; Gives a yes or no response to any comments using modal verbs
 (define (modal-response verb person)
   ;random gen either 1 or 2
-  (define num 1)
+  (define num (random 1))
   (if (= 1 num)
       (list 'Yes 'I verb person)
       ;; example: (map string->symbol '("would"))
       (list 'No 'I (to-string verb) 'not person)))
+
+(define (how-response)
+  ;random gen either 1 or 2
+  (let ([x (random 1)])
+    (if (= 1 x)
+        (list 'Why 'do 'you 'ask?)
+        (list 'How 'would 'an 'answer 'to 'that 'help 'you?))))
+
+(define (what-response)
+  ;random gen either 1 or 2
+  (let ([x (random 1)])
+    (if (= 1 x)
+        (list 'What 'do 'you 'think?)
+        (list 'Why 'do 'you 'ask?))))
+
+(define (bc-response)
+  ;random gen either 1 or 2
+        (list 'Is 'that 'the 'real 'reason?))
 
 ; string-contains-mult: string list -> bool
 ; Takes in a list of strings and determines if target appears in list
@@ -93,7 +114,7 @@
   ; lambda is a generic function def, filter applies it to each item in list and
   ; returns the result of any that are true, then string->symbol to change the ""
   ; item into a symbol for list concat, need car to take car of '("item") to get string
-  (string->symbol(car (filter (lambda (elem) (string-contains str elem)) lst))))
+  (string->symbol(car (filter (lambda (elem) (string-contains (string-downcase str) elem)) lst))))
 
 
 (chat-with 'Chris)
