@@ -67,6 +67,7 @@
     [(string-contains (string-downcase (to-string input)) "how") (output(how-response))]
     [(string-contains (string-downcase (to-string input)) "what") (output(what-response))]
     [(string-contains (string-downcase (to-string input)) "because") (output(bc-response))]
+    [(and (string-contains (string-downcase (to-string input)) "i") (string-contains-mult (to-string input) '("need" "think" "have" "want"))) (output(i-modal-response))]
     [(not(null? (string-contains-mult (to-string input) '("do" "can" "could" "must" "should" "will" "would")))) (output(modal-response (string-contains-mult (to-string input) '("do" "can" "could" "must" "should" "will" "would")) name))]
     [else (output (pick-random generic-response))]
     ))
@@ -84,7 +85,7 @@
 ; Gives a yes or no response to any comments using modal verbs
 (define (modal-response verb person)
   ;random gen either 1 or 2
-  (define num (random 1))
+  (define num (random 2))
   (if (= 1 num)
       (list 'Yes 'I verb person)
       ;; example: (map string->symbol '("would"))
@@ -92,14 +93,14 @@
 
 (define (how-response)
   ;random gen either 1 or 2
-  (let ([x (random 1)])
+  (let ([x (random 2)])
     (if (= 1 x)
         (list 'Why 'do 'you 'ask?)
         (list 'How 'would 'an 'answer 'to 'that 'help 'you?))))
 
 (define (what-response)
   ;random gen either 1 or 2
-  (let ([x (random 1)])
+  (let ([x (random 2)])
     (if (= 1 x)
         (list 'What 'do 'you 'think?)
         (list 'Why 'do 'you 'ask?))))
@@ -107,6 +108,9 @@
 (define (bc-response)
   ;random gen either 1 or 2
         (list 'Is 'that 'the 'real 'reason?))
+
+(define (i-modal-response verb action)
+  (list 'Why 'do 'you verb action))
 
 ; string-contains-mult: string list -> bool
 ; Takes in a list of strings and determines if target appears in list
