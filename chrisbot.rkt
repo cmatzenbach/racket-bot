@@ -106,18 +106,17 @@
         (list 'Why 'do 'you 'ask?))))
 
 (define (bc-response)
-  ;random gen either 1 or 2
         (list 'Is 'that 'the 'real 'reason?))
 
 (define (i-modal-response verb action)
   (list 'Why 'do 'you verb action))
 
-; string-contains-mult: string list -> bool
-; Takes in a list of strings and determines if target appears in list
+; string-contains-mult: string list -> string
+; Takes in a list of strings and determines if targets appears in list; if so, return match
 (define (string-contains-mult str lst)
   ; lambda is a generic function def, filter applies it to each item in list and
-  ; returns the result of any that are true, then string->symbol to change the ""
-  ; item into a symbol for list concat, need car to take car of '("item") to get string
+  ; returns the result of any that are true, then car to take car of '("item") to get string,
+  ; finally string->symbol to change the "" item into a symbol for list concat
   (string->symbol(car (filter (lambda (elem) (string-contains (string-downcase str) elem)) lst))))
 
 
