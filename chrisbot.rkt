@@ -3,9 +3,6 @@
 ; CHRIS-BOT
 #lang racket
 
-; Use the random function implemented in Racket
-; (random k) returns a random integer in the range 0 to k-1
-(#%require (only racket/base random))
 ; library for string-contains
 (require srfi/13)
 
@@ -74,6 +71,7 @@
 
 ; pick-random: int -> int
 ; Takes in limit and returns random int within said limit
+; Uses the random function implemented in Racket: (random k) returns a random integer in the range 0 to k-1
 (define (pick-random choices)
   (list-ref choices(random(length choices))))
 
@@ -110,6 +108,8 @@
 
 (define (i-modal-response verb action)
   (list 'Why 'do 'you verb action))
+
+; advice on regex: input = eval (regexp-match ".*could *(.*)" "I could eat a hotdog") output = '("I could eat a hotdog" "eat a hotdog")
 
 ; string-contains-mult: string list -> string
 ; Takes in a list of strings and determines if targets appears in list; if so, return match
