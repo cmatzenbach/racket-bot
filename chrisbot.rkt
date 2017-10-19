@@ -59,15 +59,16 @@
 
 ; reply: list string -> (func)
 (define (reply input name)
+  (let ([check-text (string-downcase (to-string input))])
   (cond
-    [(string-contains (string-downcase (to-string input)) "why") (output(list 'Why 'not?))]
-    [(string-contains (string-downcase (to-string input)) "how") (output(how-response))]
-    [(string-contains (string-downcase (to-string input)) "what") (output(what-response))]
-    [(string-contains (string-downcase (to-string input)) "because") (output(bc-response))]
-    [(and (string-contains (string-downcase (to-string input)) "i") (string-contains-mult (to-string input) '("need" "think" "have" "want"))) (output(i-modal-response))]
-    [(not(null? (string-contains-mult (to-string input) '("do" "can" "could" "must" "should" "will" "would")))) (output(modal-response (string-contains-mult (to-string input) '("do" "can" "could" "must" "should" "will" "would")) name))]
+    [(string-contains check-text "why") (output(list 'Why 'not?))]
+    [(string-contains check-text "how") (output(how-response))]
+    [(string-contains check-text "what") (output(what-response))]
+    [(string-contains check-text "because") (output(bc-response))]
+    [(and (string-contains check-text "i") (string-contains-mult check-text '("need" "think" "have" "want"))) (output(i-modal-response (string-contains-mult check-text '("need" "think" "have" "want")) name))]
+    [(not(null? (string-contains-mult check-text '("do" "can" "could" "must" "should" "will" "would")))) (output(modal-response (string-contains-mult check-text '("do" "can" "could" "must" "should" "will" "would")) name))]
     [else (output (pick-random generic-response))]
-    ))
+    )))
 
 ; pick-random: int -> int
 ; Takes in limit and returns random int within said limit
@@ -87,7 +88,7 @@
   (if (= 1 num)
       (list 'Yes 'I verb person)
       ;; example: (map string->symbol '("would"))
-      (list 'No 'I (to-string verb) 'not person)))
+      (list 'No 'I verb 'not person)))
 
 (define (how-response)
   ;random gen either 1 or 2
@@ -117,7 +118,11 @@
   ; lambda is a generic function def, filter applies it to each item in list and
   ; returns the result of any that are true, then car to take car of '("item") to get string,
   ; finally string->symbol to change the "" item into a symbol for list concat
-  (string->symbol(car (filter (lambda (elem) (string-contains (string-downcase str) elem)) lst))))
+
+  ; OLD: (string->symbol(car (filter (lambda (elem) (string-contains str elem)) lst))) PROBLEM: does string->symbol on empty list
+  ; POTENTIAL OTHER: (let ([strs (filter (lambda (elem) (string-contains str elem)) lst)]) (if (empty? strs) 'no-match (string->symbol (first strs))))
+  (for/first ([elem (in-list lst)] #:when (string-contains str elem)) (string->symbol elem))
+  )
 
 
 (chat-with 'Chris)
