@@ -61,12 +61,13 @@
 (define (reply input name)
   (let ([check-text (string-downcase (to-string input))])
   (cond
+    [(or (string-contains check-text "hello") (string-contains check-text "hi ")) (output(hi-response))]
     [(string-contains check-text "why") (output(list 'Why 'not?))]
     [(string-contains check-text "how") (output(how-response))]
     [(string-contains check-text "what") (output(what-response))]
     [(string-contains check-text "because") (output(bc-response))]
     [(and (string-contains check-text "i") (string-contains-mult check-text '("need" "think" "have" "want"))) (output(i-modal-response (string-contains-mult check-text '("need" "think" "have" "want")) name))]
-    [(not(null? (string-contains-mult check-text '("do" "can" "could" "must" "should" "will" "would")))) (output(modal-response (string-contains-mult check-text '("do" "can" "could" "must" "should" "will" "would")) name))]
+    [(string-contains-mult check-text '("do" "can" "could" "must" "should" "will" "would")) (output(modal-response (string-contains-mult check-text '("do" "can" "could" "must" "should" "will" "would")) name))]
     [else (output (pick-random generic-response))]
     )))
 
@@ -79,6 +80,15 @@
 (define generic-response '((that\'s nice)
                            (good to know)
                            (can you elaborate on that?)))
+
+; hi-response: () -> list
+; picks a random greeting
+(define (hi-response)
+  (let ([x (random 3)])
+    (cond
+      [(= 1 x) (list 'Hello 'bobcat)]
+      [(= 2 x) (list 'Hi 'little 'fish)]
+      [(= 0 x) (list 'Hi 'kotku)])))
 
 ; modal-response: list string -> response
 ; Gives a yes or no response to any comments using modal verbs
